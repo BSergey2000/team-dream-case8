@@ -1,0 +1,269 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Виртуальные окружения
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Pipenv / Poetry
+Pipfile.lock
+poetry.lock
+
+# =========================
+# IDE: PyCharm (полностью)
+# =========================
+.idea/
+*.iws
+*.iml
+*.ipr
+.idea/*
+!.idea/runConfigurations/      # если хочешь сохранять конфиги запуска — можно оставить
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries/
+.idea/shelf/
+.idea/modules.xml
+.idea/vcs.xml
+.idea/dataSources*
+.idea/sqlDataSources.xml
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# =========================
+# Данные и результаты — аккуратно!
+# =========================
+# Игнорируем только тяжёлые/временные данные
+data/raw/
+data/*.bak
+data/*.xlsx
+data/*.zip
+
+# ОСТАЛЬНОЕ В data/ НЕ ИГНОРИРУЕМ! (особенно financials.csv — он обязателен в репо)
+
+# Графики и отчёты — НЕ игнорируем (они часть результата)
+# results/ — всё сохраняем
+
+# =========================
+# Модели (большие файлы) — по желанию
+# =========================
+# Раскомментируй, если НЕ хочешь заливать модели в Git (обычно так и делают)
+models/*.pkl
+models/*.joblib
+models/*.h5
+
+# =========================
+# Тесты и отчёты покрытия
+# =========================
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# =========================
+# Логи и временные файлы
+# =========================
+*.log
+logs/
+*.tmp
+*.temp
+*.swp
+*~
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Виртуальные окружения
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Pipenv / Poetry
+Pipfile.lock
+poetry.lock
+
+# =========================
+# IDE: PyCharm (полностью)
+# =========================
+.idea/
+*.iws
+*.iml
+*.ipr
+.idea/*
+!.idea/runConfigurations/      # если хочешь сохранять конфиги запуска — можно оставить
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries/
+.idea/shelf/
+.idea/modules.xml
+.idea/vcs.xml
+.idea/dataSources*
+.idea/sqlDataSources.xml
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# =========================
+# Данные и результаты — аккуратно!
+# =========================
+# Игнорируем только тяжёлые/временные данные
+data/raw/
+data/*.bak
+data/*.xlsx
+data/*.zip
+
+# ОСТАЛЬНОЕ В data/ НЕ ИГНОРИРУЕМ! (особенно financials.csv — он обязателен в репо)
+
+# Графики и отчёты — НЕ игнорируем (они часть результата)
+# results/ — всё сохраняем
+
+# =========================
+# Модели (большие файлы) — по желанию
+# =========================
+# Раскомментировано для игнора моделей в Git
+models/*.pkl
+models/*.joblib
+models/*.h5
+
+# =========================
+# Тесты и отчёты покрытия
+# =========================
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# =========================
+# Логи и временные файлы
+# =========================
+*.log
+logs/
+*.tmp
+*.temp
+*.swp
+*~
+
+# =========================
+# ОС-специфичные
+# =========================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+
+# =========================
+# Базы данных
+# =========================
+*.db
+*.sqlite3
+*.sqlite
+
+# =========================
+# Другое (на всякий случай)
+# =========================
+.DS_Store
+.env.local
+.env.development
+.env.production
