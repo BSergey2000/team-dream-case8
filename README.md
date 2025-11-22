@@ -55,14 +55,29 @@
 
 
 ## Быстрый старт
+## Быстрый старт (30 секунд)
+
 ```bash
+git clone https://github.com/BSergey2000/team-dream-case8.git
+cd team-dream-case8
+
+# Создаём и активируем виртуальное окружение
+python -m venv venv
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # Mac/Linux (если вдруг)
+
+# Устанавливаем зависимости
 pip install -r requirements.txt
+
+# Запускаем — получаем всё сразу!
 python main.py
 ```
-→ Через минуту у тебя будут: обученная модель, 4 шикарных графика, SHAP-анализ и предсказания для гигантов.
+→ За минуту будут:
 
-
-### Часть 7 — Визуализации
+обученная XGBoost-модель
+4 шикарных графика
+SHAP-анализ
+таблица с предсказаниями для Apple, Microsoft, Amazon и др.
 
 ## Ключевые визуализации
 
