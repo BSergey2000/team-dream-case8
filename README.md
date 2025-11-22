@@ -1,4 +1,4 @@
-# Прогнозирование стоимости кампании
+# Прогнозирование стоимости компании
 **XGBoost + SHAP · R² = 0.803 · Полная интерпретируемость**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
