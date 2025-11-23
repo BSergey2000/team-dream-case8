@@ -1,0 +1,45 @@
+# Виртуальное окружение
+venv/
+.venv/
+env/
+
+# Кэши Python и Jupyter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# IDE
+.idea/
+.vscode/
+
+# Системный мусор
+.DS_Store
+Thumbs.db
+
+# МОДЕЛИ
+models/
+*.pkl
+*.joblib
+*.pickle
+
+# ВСЕ ГРАФИКИ И ОТЧЁТЫ
+01_distribution.png
+02_correlation.png
+03_importance.png
+04_shap_summary.png
+05_shap_waterfall_*.png
+comparison_models.png
+
+# Промежуточные данные (если будут)
+data/processed/
+data/interim/
+*.feather
+*.parquet
+
+# Логи и временные папки
+*.log
+logs/
+temp/
+
+# Исключения — то, что ДОЛЖНО быть в репо (иначе будет пусто)
+!comparison_table.csv          # ← Таблица с результатами моделей
