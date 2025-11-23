@@ -1,5 +1,0 @@
-Модель,R²,MAE (млрд $)
-Linear Regression,0.146,32.56
-Gradient Boosting,0.7228,12.96
-XGBoost,0.6679,16.45
-LightGBM,0.7228,14.47
