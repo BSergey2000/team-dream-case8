@@ -33,7 +33,9 @@ def main():
     print(f"SHAP-анализ для лучшей модели: {best_model_name}")
     generate_shap_analysis(best_model_name)
 
-    print("\nГотово. Все модели сохранены, сравнение сделано.")
+    print("="*70)
+    print("ГОТОВО! ВСЕ МОДЕЛИ СОХРАНЕНЫ, СРАВНЕНИЕ ПРОВЕДЕНО!")
+    print("="*70)
 
 if __name__ == "__main__":
     main()
