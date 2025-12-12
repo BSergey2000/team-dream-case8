@@ -1,41 +1,134 @@
-# Один запуск — всё готово
+# main.py
+"""
+Основной скрипт проекта.
+Здесь мы собираем все части вместе, чтобы получить результат — обученную модель и отчёт
+Если что-то сломается, программа запишет ошибку в лог, чтобы вы могли понять, где проблема
+"""
 
-from src.eda import generate_eda_plots
-from src.data_preparation import load_and_prepare_data
-from src.models_training import train_all_models
-from src.evaluation import evaluate_and_compare
-from src.shap_analysis import generate_shap_analysis
+from configs.config import logger
+# Это библиотека, которая помогает работать с путями к файлам
+import sys
+from pathlib import Path  # Помогает с путями к файлам
+# Библиотека для математики
+import numpy as np
+# Помогает игнорировать ненужные предупреждения, чтобы лог был чистым
+import warnings
 
-def main():
-    print("="*70)
-    print("ПРОГНОЗИРОВАНИЕ СТОИМОСТИ КОМПАНИЙ — ПОЛНОЕ СРАВНЕНИЕ")
-    print("="*70)
+# Устанавливаем путь к проекту, чтобы все файлы находились правильно
+ROOT_DIR = Path(__file__).parent.resolve()
+sys.path.insert(0, str(ROOT_DIR))
+sys.path.insert(0, str(ROOT_DIR / 'src'))
 
-    generate_eda_plots()
-    data = load_and_prepare_data()
+# Импорт конфигурации
 
-    models = train_all_models(
-        data["X_train"],
-        data["X_test"],
-        data["y_train_log"],
-        data["y_test_log"]
-    )
+# Импорт модулей
+try:  # Проверяем, чтобы не было ошибок при импорте
+    from src.eda import main as eda_main  # Для анализа данных
+    # Для подготовки данных
+    from src.preprocess import preprocess_main, load_data
+    from src.train import main as train_main  # Для обучения моделей
+    # Для оценки моделей
+    from src.metrics import evaluate_models, plot_comparison, select_best_model, generate_report
+    # Для анализа важности признаков
+    from src.shap_analysis import main as shap_main
+# Если друг не пришел (ошибка импорта), записываем проблему и останавливаемся
+except ImportError as e:
+    logger.error(
+        f"Ошибка импорта модуля: {e}. Проверьте, есть ли файл и правильно ли путь.")
+    sys.exit(1)  # Выходим из программы, если ошибка
 
-    best_model_name = evaluate_and_compare(
-        models,
-        data["X_train"],
-        data["X_test"],
-        data["y_train_log"],
-        data["y_test_real"],
-        data["names_test"]
-    )
+# Игнорируем ненужные предупреждения, чтобы лог не был замусорен, как уборка в комнате
+warnings.filterwarnings("ignore", category=UserWarning)
 
-    print(f"SHAP-анализ для лучшей модели: {best_model_name}")
-    generate_shap_analysis(best_model_name)
 
-    print("="*70)
-    print("ГОТОВО! ВСЕ МОДЕЛИ СОХРАНЕНЫ, СРАВНЕНИЕ ПРОВЕДЕНО!")
-    print("="*70)
+def full_pipeline():
+    """
+    Основная функция, которая запускает весь процесс, как конвейер на фабрике
+    Шаги: Загрузка данных, анализ (EDA), подготовка, обучение, оценка, SHAP, отчёт
+    Если где-то ошибка, программа запишет её в лог и остановится
+    """
+    # Что здесь происходит: запускается весь конвейер — от данных до отчёта
+    # Зачем это нужно: единая точка входа для выполнения всех шагов проекта
+    # Какие данные обрабатываются: таблица financials и результаты обучения
+    logger.info(
+        "Запуск полного пайплайна.")  # Записываем в лог, что начали работу
+
+    try:  # Пробуем выполнить все шаги, как пробный запуск машины
+        # Шаг 1: Загрузка данных для анализа — это как открыть книгу с данными
+        # Что здесь происходит: читаем CSV с данными в DataFrame
+        # Зачем это нужно: без данных модель ничего не обучит
+        # Какие данные обрабатываются: финансовые показатели компаний
+        df = load_data()
+
+        # Шаг 2: Анализ данных (EDA) — смотрим, что в таблице, рисуем графики
+        # Что здесь происходит: запуск визуального анализа данных (EDA)
+        # Зачем это нужно: понять распределения и проблемы в наборе данных
+        eda_main()  # Вызываем функцию анализа
+        logger.info("EDA завершён.")  # Записываем, что анализ закончен
+
+        # Шаг 3: Подготовка данных — чистим, режем на части для обучения
+        # X — признаки, y — таргет (Market Cap)
+        # Что здесь происходит: подготовка данных и разбиение на train/test
+        # Зачем это нужно: выделить данные для обучения и проверки
+        X_train, X_test, y_train, y_test, preprocessor = preprocess_main()
+        # Фит preprocessor — учим его на данных
+        # Что здесь происходит: подгоняем препроцессор на тренировочных данных
+        # Зачем это нужно: фиксируем параметры заполнения/масштабирования
+        preprocessor.fit(X_train)
+        # Log — делаем числа меньше, чтобы модель лучше работала (для кривых распределений)
+        # Что здесь происходит: логарифмируем целевую переменную для стабилизации разброса
+        # Зачем это нужно: уменьшить влияние сильных выбросов и сделать обучение стабильнее
+        y_train_log = np.log1p(y_train)
+        y_test_log = np.log1p(y_test)
+        y_test_real = y_test  # Реальные значения для проверки
+        # Имена компаний для графиков
+        # Что здесь происходит: берём названия компаний для тестовой выборки (для графиков)
+        # Какие данные обрабатываются: колонка 'Name' исходного DataFrame
+        names_test = df.loc[X_test.index, 'Name']
+        # Получаем имена признаков через утилиту из preprocess, она безопасно обработает Pipeline с FunctionTransformer
+        # Что здесь происходит: получаем имена признаков после преобразований препроцессора
+        # Зачем это нужно: нужно для SHAP и подписей на графиках
+        from src.preprocess import get_feature_names
+        feature_names = get_feature_names(preprocessor, X_train)
+
+        # Шаг 4: Обучение моделей — учим предсказывать
+        # Результат — словарь с моделями
+        # Передаём preprocessor в train для того, чтобы не пересобирать конвейер внутри каждого шага обучения и
+        # снизить лишнюю генерацию логов и затрат времени
+        # Что здесь происходит: обучение набора моделей с передачей preprocessor
+        # Зачем это нужно: чтобы модели использовали тот же конвейер подготовки
+        train_res = train_main(
+            X_train, X_test, y_train_log, y_test_log, preprocessor)
+        models = train_res['models']  # Список моделей
+        metrics_dict = train_res['metrics']  # Их оценки
+        logger.info("Обучение моделей завершено.")
+
+        # Шаг 5: Оценка моделей — проверяем, насколько хорошо они предсказывают
+        # Таблица результатов
+        # Что здесь происходит: оценка обученных моделей и создание таблицы сравнения
+        # Какие данные обрабатываются: предсказания моделей и реальные значения
+        df_results = evaluate_models(
+            models, metrics_dict, X_train, X_test, y_train_log, y_test_log, y_test_real, names_test)
+        best_name = select_best_model(df_results)  # Выбираем лучшую
+        plot_comparison(df_results)  # Рисуем графики сравнения
+        logger.info("Оценка моделей завершена.")
+
+        # Шаг 6: SHAP-анализ — смотрим, какие признаки важны, строим графики
+        # Что здесь происходит: запускается анализ SHAP для лучшей модели
+        # Зачем это нужно: понять, какие признаки влияют на предсказание
+        shap_main(best_name, X_train, X_test, y_train_log, y_test_log,
+                  y_test_real, names_test, feature_names, df_results)
+        logger.info("SHAP-анализ и отчёт завершены.")
+
+        # Шаг 7: Как запустить сервер для предсказаний
+        logger.info("Для запуска API: uvicorn src.deploy:app --reload из корня.")
+
+        logger.info("Полный пайплайн завершён успешно.")  # Всё готово!
+    # Если ошибка, записываем её и останавливаемся, чтобы не сломать всё
+    except Exception as e:
+        logger.error(f"Ошибка в пайплайне: {e}. Проверьте данные или код.")
+        raise  # Поднимаем ошибку для отладки.
+
 
 if __name__ == "__main__":
-    main()
+    full_pipeline()  # Запускаем главную функцию, если файл запущен напрямую.
